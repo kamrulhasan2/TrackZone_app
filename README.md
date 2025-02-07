@@ -178,7 +178,7 @@ Creating a **Component Tree** and a **Data Flow Diagram** is essential for v
 
 The **Component Tree** represents the hierarchy of components in your React application. Here’s how the components are structured:
 
-[![TrackZone Application-Page-1.drawio.png](attachment:49105f4d-ea4a-4d3c-ad82-f13c4b08709c:TrackZone_Application-Page-1.drawio.png)](https://www.notion.so/Track-Zone-Project-18d7d361d9ce803ca379c73c5619533b?pvs=4#1917d361d9ce80759a4ce4beec641a8a)
+https://github.com/kamrulhasan2/TrackZone_app/blob/main/resource/TrackZone%20Application-Page-1.drawio.png
 
 ## **Component Tree Description**
 
@@ -260,7 +260,7 @@ Fundamental UI elements used across different components:
 
 The **Data Flow Diagram** shows how data moves between components. In React, data typically flows **unidirectionally** (from parent to child via props) or is managed globally using **context** or **state management libraries**.
 
-[![data flow diagram.png](attachment:07d14e43-4978-423e-88f9-3393698065dc:data_flow_diagram.png)](https://www.notion.so/Track-Zone-Project-18d7d361d9ce803ca379c73c5619533b?pvs=4#1917d361d9ce80d5a873c9ec693bf699)
+https://github.com/kamrulhasan2/TrackZone_app/blob/main/resource/data%20flow%20diagram.png
 
 ### **Data Flow & State Management Description**
 
@@ -338,7 +338,7 @@ The **Data Flow Diagram** shows how data moves between components. In React, d
 
 Creating a UI view for the TrackZone application involves designing a user interface that incorporates all the components mentioned in the diagram. Below is a conceptual UI layout based on the provided components:
 
-[![ui of track-zone-application.png](attachment:589f5ae0-9681-4a05-93f0-6553229bee74:ui_of_track-zone-application.png)](https://www.notion.so/Track-Zone-Project-18d7d361d9ce803ca379c73c5619533b?pvs=4#1917d361d9ce8017bbf1ef0a6b84a45e)
+https://github.com/kamrulhasan2/TrackZone_app/blob/main/resource/data%20flow%20diagram.png
 
 **Main Content Area**:
 
@@ -369,4 +369,5 @@ Creating a UI view for the TrackZone application involves designing a user inter
         - Associated Clock (Select Dropdown).
     - Buttons: "Save" and "Cancel."
 
-[TimeZone Info](https://www.notion.so/TimeZone-Info-1927d361d9ce8074bbd6f5145c2ae462?pvs=21)
+-**TimeZone_Info**:
+https://github.com/kamrulhasan2/TrackZone_app/blob/main/resource/TimeZone_Info.pdf
