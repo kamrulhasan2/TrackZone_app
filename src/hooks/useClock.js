@@ -22,7 +22,7 @@ const TIMEZONE_OFFSET = {
 };
 
 
-const useClock = () => {
+const useClock = (timezone, offset =0 ) => {
     const [state,setState] = useState({...init});
     const [utc, setUtc] = useState(null);
 
@@ -33,6 +33,25 @@ const useClock = () => {
         setUtc(d);
 
     },[]);
+
+    useEffect(()=>{
+        if(utc !== null && timezone){
+            offset = TIMEZONE_OFFSET[timezone] ?? offset;
+            const newUtc = addMinutes(utc,offset);
+            setState({
+                ...state,
+                date_utc: utc,
+                date: newUtc
+            });
+        } else{
+            setState({
+                ...state,
+                date_utc: utc,
+                date: utc,
+            });
+        }
+
+    },[utc]);
 
   return {
     clock: state,
