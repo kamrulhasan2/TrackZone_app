@@ -338,7 +338,7 @@ https://github.com/kamrulhasan2/TrackZone_app/blob/main/resource/data%20flow%20d
 
 Creating a UI view for the TrackZone application involves designing a user interface that incorporates all the components mentioned in the diagram. Below is a conceptual UI layout based on the provided components:
 
-https://github.com/kamrulhasan2/TrackZone_app/blob/main/resource/data%20flow%20diagram.png
+https://github.com/kamrulhasan2/TrackZone_app/blob/main/resource/ui%20of%20track-zone-application.png
 
 **Main Content Area**:
 
