@@ -1,8 +1,15 @@
+import ClockList from "./components/clock-list"
+import LocalClock from "./components/local-clock"
 
 
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+       <LocalClock />
+       <ClockList />
+
+    </div>
+   
   )
 }
 
