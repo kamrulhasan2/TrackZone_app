@@ -1,7 +1,7 @@
 import { useState } from "react"
 import ClockList from "./components/clock-list"
 import LocalClock from "./components/local-clock"
-import useClock from "./hooks/useClock"
+
 
 
 const  LOCAL_CLOCK_INIT = {
@@ -21,7 +21,7 @@ const App = () => {
     });
   };
 
-   const {} = useClock();
+
   return (
     <div>
        <LocalClock clock={localClock} updateClock={upDateLocalClock} />
