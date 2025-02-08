@@ -1,8 +1,34 @@
+import { useEffect } from "react";
+import useClock from "../../hooks/useClock"
+import ClockDisplay from "../shared/ClockDisplay";
 
-const LocalClock = () => {
+const LocalClock = ({clock , updateClock }) => {
+  const {date,offset,timezone} = useClock(clock.timezone, clock.offset);
+  
+  useEffect(() => {
+    updateClock({
+      date,
+      timezone,
+      offset,
+    });
+  }, [date]);
+  
+
+  
   return (
-    <div>LocalClock</div>
+    <div>
+          {
+            date && (
+              <ClockDisplay 
+                  date={date}
+                  offset={offset}
+                  timezone={timezone}
+                  title={clock.title}
+              />
+            )
+          }
+    </div>
   )
 }
 
-export default LocalClock
+export default LocalClock;
