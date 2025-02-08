@@ -18,8 +18,8 @@ const useClock = (timezone, offset ) => {
 
     useEffect(()=>{
         let d = new Date();
-        const lo = d.getTimezoneOffset();
-        d = addMinutes(d, lo);
+        const lo = d.getTimezoneOffset();  //find local offset
+        d = addMinutes(d, lo);      // convert local time to UTC
         setUtc(d);
         setLocalOffset(lo);
 
