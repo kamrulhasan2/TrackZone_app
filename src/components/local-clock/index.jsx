@@ -12,7 +12,7 @@ const LocalClock = ({clock , updateClock }) => {
       timezone,
       offset,
     });
-  }, [date]);
+  }, [date,timezone]);
   
 
   

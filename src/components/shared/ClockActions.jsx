@@ -8,21 +8,16 @@ const defaultOffsets = [
 const ClockActions = ({local=false, clock,updateClock}) => {
     const [isEdit,setIsEdit] = useState(false);
 
-    const handleChange = (e)=>{
-        let {name, value} = e.target;
-        console.log('Name:', name, 'Value:', value);
-        if(name === 'offset'){
-            value = Number(value) * 60;
-        }
+    const handleChange = (e) => {
+		let { name, value } = e.target;
 
-        const updatedClock = {
-            ...clock,
-            [name]: value
-        };
-        updateClock(updatedClock);
-        console.log('Updated clock:', clock);
-    };
-
+		if (name === 'offset') {
+			value = parseInt(value) * 60;
+		}
+		updateClock({
+			[name]: value,
+		});
+    }
     //this form is use for testing 
   return (      
     <div>  
@@ -55,20 +50,17 @@ const ClockActions = ({local=false, clock,updateClock}) => {
 
                     </select>
 
-                    {
-                        (clock.timezone === 'GMT' || clock.timezone ==='UTC') &&(
-                            <select
-                                name="offset"
-                                value={clock.offset / 60}
-                                onChange={handleChange}
-                            >
-                                {
-                                    defaultOffsets.map((offset)=>(
-                                        <option key={offset} value={offset}>
-                                            {offset}
-                                        </option>
-                                    ))
-                                }
+                    {(clock.timezone === 'GMT' || clock.timezone === 'UTC') && (
+						<select
+							name="offset"
+							value={clock.offset / 60}
+							onChange={handleChange}
+						>
+							{defaultOffsets.map((offset) => (
+								<option key={offset} value={offset}>
+									{offset}
+								</option>
+							))}
                             </select>
                         )
                     }
