@@ -39,7 +39,8 @@ const ClockActions = ({local=false, clock,updateClock}) => {
                         name="timezone"
                         value={clock.timezone}
                         onChange={handleChange}
-                    >
+                    >   
+                        <option value="">TZ</option>
                         <option value="GMT">GMT</option>
                         <option value="UTC">UTC</option>
                         <option value="PST">PST</option>
@@ -50,7 +51,8 @@ const ClockActions = ({local=false, clock,updateClock}) => {
 
                     </select>
 
-                    {(clock.timezone === 'GMT' || clock.timezone === 'UTC') && (
+                    {(clock.timezone === 'MST' || clock.timezone === 'UTC') && (
+                       
 						<select
 							name="offset"
 							value={clock.offset / 60}
@@ -61,7 +63,7 @@ const ClockActions = ({local=false, clock,updateClock}) => {
 									{offset}
 								</option>
 							))}
-                            </select>
+                        </select>
                         )
                     }
 
