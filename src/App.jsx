@@ -17,7 +17,7 @@ const App = () => {
   const upDateLocalClock = (data) =>{
     setLocalClock({
       ...localClock,
-      data,
+      ...data,
     });
   };
 

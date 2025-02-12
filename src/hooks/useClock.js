@@ -34,6 +34,14 @@ const useClock = (timezone, offset ) => {
         } 
     },[utc,timezone,offset]);
 
+    console.log('I am from hooks********');
+    console.log("localDate",localDate);
+    console.log("utc",utc);
+    console.log("offset",offset);
+    console.log("localOffset",localOffset);
+    console.log("timezone",localTimezone);
+    console.log('**********************');
+
   return {
     date: localDate,
     dateUtc: utc,
