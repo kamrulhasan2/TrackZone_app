@@ -10,13 +10,16 @@ const ClockActions = ({local=false, clock,updateClock}) => {
 
     const handleChange = (e) => {
 		let { name, value } = e.target;
+        console.log(name);
+        console.log(value);
 
 		if (name === 'offset') {
-			value = parseInt(value) * 60;
+			value = Number(value) * 60;
 		}
-		updateClock({
-			[name]: value,
-		});
+		updateClock((prev)=>({
+            ...prev,
+            [name]: value,
+        }));
     }
     //this form is use for testing 
   return (      
