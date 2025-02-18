@@ -64,7 +64,7 @@ const App = () => {
           clocks={clocks}
           updateClock={updateClock}
           deleteClock={deleteClock}
-          localClock={localClock}
+          localClock={localClock.date}
        />
 
     </div>
