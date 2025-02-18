@@ -34,6 +34,23 @@ const App = () => {
     ]);
   }
 
+  const updateClock = (updatedClock)=>{
+    const updatedColocks = clocks.map((clock)=>{
+      if( clock.id === updatedClock.id ){
+        return updatedClock;
+      }
+      return clock;
+    });
+
+    setClocks(updatedColocks);
+  }
+
+
+  const deleteClock = (id)=>{
+    const updatedColocks = clocks.filter((clock)=> clock.id !== id);
+
+    setClocks(updatedColocks);
+  }
 
   return (
     <div>
