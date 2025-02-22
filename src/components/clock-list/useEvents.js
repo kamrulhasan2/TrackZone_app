@@ -42,6 +42,17 @@ const useEvents = () => {
         setState(events);
     }
 
+    const updateEvents = (updatedEvent,id)=>{
+        const events = {...state};
+
+        events[id] = {
+            ...events[id],
+            updatedEvent
+        };
+
+        setState(events);
+    }
+
 
   return {
     events: state,
@@ -49,6 +60,7 @@ const useEvents = () => {
     getEvents,
     addEvent,
     deleteEvent,
+    deleteEventByClock
 
   }
 }
