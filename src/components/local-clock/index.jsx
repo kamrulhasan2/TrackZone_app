@@ -8,7 +8,7 @@ const LocalClock = ({clock , updateClock ,createClock, deleteClock}) => {
   const {date,offset,timezone} = useClock(clock.timezone, clock.offset);
 
   const timer = useTimer(date);
-  console.log(timer);
+ 
   
   useEffect(() => {
     updateClock({

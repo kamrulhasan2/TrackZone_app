@@ -23,7 +23,7 @@ const useTimer = (date) => {
         return ()=> clearInterval(timerId);
     },[timer]);
 
-    console.log('[useTimer hooks:]',timer);
+   
   return timer;
 }
 
