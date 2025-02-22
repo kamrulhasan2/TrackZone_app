@@ -1,3 +1,4 @@
+import { de } from 'date-fns/locale';
 import React, { useState } from 'react'
 import { generate } from 'shortid';
 
@@ -30,10 +31,20 @@ const useEvents = () => {
 
     }
 
+    const deleteEvent = (id)=>{
+        const events = {...state};
+        delete events[id];
+        setState(events);
+    }
+
 
   return {
     events: state,
     getEventsByClockId,
+    getEvents,
+    addEvent,
+    deleteEvent,
+
   }
 }
 
