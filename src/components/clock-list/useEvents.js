@@ -37,6 +37,11 @@ const useEvents = () => {
         setState(events);
     }
 
+    const deleteEventByClock = (clockId)=>{
+        const events = Object.keys(state).filter((item) => !item.startsWith(clockId));
+        setState(events);
+    }
+
 
   return {
     events: state,
