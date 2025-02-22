@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { generate } from 'shortid';
 
 const useEvents = () => {
     const [state,setState] = useState();
@@ -7,12 +8,26 @@ const useEvents = () => {
         return Object.keys(state).filter((item) => item.startsWith(clockId));
     }
 
-    const getEvents = ( isArray = false){  //return Events as an Array
+    const getEvents = ( isArray = false) =>{  //return Events as an Array
         if(!isArray){
             return state;
         }
 
         return Object.values(state);
+    }
+
+    const addEvent = (event)=>{
+        event.id = generate();
+
+        const {id, clockId} = event;
+
+        setState((prev)=>({
+            ...prev,
+            [`${clockId}|${id}`]: event
+        }));
+
+        return event;
+
     }
 
 
