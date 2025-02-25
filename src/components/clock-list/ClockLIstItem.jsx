@@ -3,6 +3,7 @@ import useClock from "../../hooks/useClock";
 import ClockActions from "../shared/clock-Actions/ClockActions";
 import ClockDisplay from "../shared/clock-display/ClockDisplay";
 import useTimer from "../../hooks/useTimer";
+import EventUI from "../shared/event-ui/EventUI";
 
 
 
@@ -28,6 +29,8 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
             updateClock={updateClock}
             deleteClock={deleteClock}
         />
+
+       <EventUI clockId={clock.id}/>
     </div>
   )
 }

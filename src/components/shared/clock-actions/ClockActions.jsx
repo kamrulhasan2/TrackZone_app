@@ -3,6 +3,7 @@ import ClockForm from "../clock-form/ClockForm";
 import ButtonLocal from "../../../ui/button/ButtonLocal";
 
 
+
 const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock}) => {
     const [isEdit,setIsEdit] = useState(false);
     const [isCreate,setIsCreate] = useState(false);
@@ -63,6 +64,7 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
                 </>
             )
         }
+
     </div>
   )
 }

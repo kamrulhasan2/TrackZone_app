@@ -3,13 +3,15 @@ import React, { useState } from 'react'
 import { generate } from 'shortid';
 
 const useEvents = () => {
-    const [state,setState] = useState();
+    const [state,setState] = useState({});
 
     const getEventsByClockId = (clockId) =>{
+        if(!state) return [];
         return Object.keys(state).filter((item) => item.startsWith(clockId));
     }
 
     const getEvents = ( isArray = false) =>{  //return Events as an Array
+       if(!state) return isArray ? [] : {};
         if(!isArray){
             return state;
         }
