@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ClockForm from "../clock-form/ClockForm";
+import ButtonLocal from "../../../ui/button/ButtonLocal";
 
 
 const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock}) => {
@@ -13,12 +14,28 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
    
   return (      
     <div>  
-        <button onClick={() => setIsEdit(!isEdit)} >Edit</button>
+        <ButtonLocal
+            text={'Edit'} 
+            onClick={() => setIsEdit(!isEdit)} 
+            color={'warning'}
+            size={'small'}
+         />
+
         {
             local ? (
-                <button onClick={()=> setIsCreate(!isCreate)}>Create</button>
+                <ButtonLocal
+                    text={'Create'} 
+                    onClick={() => setIsCreate(!isCreate)} 
+                    color={'info'}
+                    size={'small'}
+                />
             ) : (
-                <button onClick={()=> deleteClock(clock.id)}>Delete</button>
+                <ButtonLocal
+                    text={'Delete'} 
+                    onClick={() => deleteClock(clock.id)} 
+                    color={'info'}
+                    size={'small'}
+                />
             )
         }
 

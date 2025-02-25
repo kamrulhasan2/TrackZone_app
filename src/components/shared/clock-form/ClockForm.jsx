@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { getOffset } from "../../../utils/timezone";
 import { TIMEZONE_OFFSET } from "../../../constants/timezone";
+import classes from './index.module.css'
+import ButtonLocal from "../../../ui/button/ButtonLocal";
 
 
 const ClockForm = ({
@@ -100,7 +102,8 @@ const ClockForm = ({
 
         )}
 
-        <button>{edit ? 'Update' : 'Create'}</button>
+        <button className={classes.btn}>{edit ? 'Update' : 'Create'}</button>
+        {/* <ButtonLocal text={edit ? 'Update' : 'Create'} type='submit' /> */}
         
 
     </form>
