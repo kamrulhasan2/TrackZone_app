@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { getOffset } from "../../../utils/timezone";
-import { TIMEZONE_OFFSET } from "../../../constants/timezone";
+import { ALL_TIMEZONE_OFFSET, TIMEZONE_OFFSET } from "../../../constants/timezone";
 import classes from './index.module.css'
-import ButtonLocal from "../../../ui/button/ButtonLocal";
+import SelectComonent from "../../../ui/select/SelectComonent";
+import InputComponent from "../../../ui/input/InputComponent";
 
 
 const ClockForm = ({
@@ -45,67 +46,46 @@ const ClockForm = ({
     };
 
 
-
   return (
     <form onSubmit={handleSubmit}>
-        <div>
-            <label htmlFor="title">Enter Title</label>
-            <input 
-                type="text"
-                id="title"
-                name="title"
-                value={formValues.title}
-                onChange={handleChange}
-                disabled={!title} 
-            />
-        </div>
+        <InputComponent 
+            text={"Enter Title"}
+            type={'text'}
+            name={'title'}
+            value={formValues.title}
+            handleChange={handleChange}
+            disabled={!title} 
+
+        />
 
         <div>
-            <label htmlFor="timezone">Enter Timezone</label>
-            <select
-                 name="timezone" 
-                 id="timezone"
-                 value={formValues.timezone}
-                 onChange={handleChange}
-            >
-                <option value="GMT">GMT</option>
-                <option value="UTC">UTC</option>
-                <option value="PST">PST</option>
-                <option value="EST">EST</option>
-                <option value="EDT">EDT</option>
-                <option value="BST">BST</option>
-                <option value="MST">MST</option>
-   
-            </select>
+            <SelectComonent 
+                formValues={formValues} 
+                handleChange={handleChange} 
+                text={'Enter Timezone'}
+                name={"timezone"}
+                value={formValues.offset}
+                maped={ALL_TIMEZONE_OFFSET}
+            />
         </div>
 
 
         {(formValues.timezone === 'GMT' || formValues.timezone === 'UTC') && (
             <div>
-                    <label htmlFor="offset">Enter Offset</label>
-                    <select
-                        name="offset" 
-                        id="offset"
-                        value={formValues.offset / 60}
-                        onChange={handleChange}
-                    >
-                        {
-                            getOffset().map((offset)=> (
-                                <option key={offset} value={offset}>
-                                    {offset}
-                                </option>
-                            ))
-                        }
-        
-                    </select>
-            </div>
+                <SelectComonent 
+                    formValues={formValues} 
+                    handleChange={handleChange} 
+                    text={'Enter Offset'}
+                    name={"offset"}
+                    value={formValues.offset / 60}
+                    maped={getOffset()}
+                />
+             </div>
 
         )}
 
         <button className={classes.btn}>{edit ? 'Update' : 'Create'}</button>
-        {/* <ButtonLocal text={edit ? 'Update' : 'Create'} type='submit' /> */}
         
-
     </form>
   )
 }

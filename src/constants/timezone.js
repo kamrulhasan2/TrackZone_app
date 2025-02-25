@@ -6,3 +6,5 @@ export const TIMEZONE_OFFSET = {
     BST: 1 * 60,
     MST: -6 * 60
 };
+
+export const ALL_TIMEZONE_OFFSET = ['UTC','GMT',...Object.keys(TIMEZONE_OFFSET)]
