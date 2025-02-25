@@ -61,10 +61,10 @@ const ClockForm = ({
         <div>
             <SelectComonent 
                 formValues={formValues} 
-                handleChange={handleChange} 
                 text={'Enter Timezone'}
                 name={"timezone"}
-                value={formValues.offset}
+                value={formValues.timezone}
+                handleChange={handleChange} 
                 maped={ALL_TIMEZONE_OFFSET}
             />
         </div>
