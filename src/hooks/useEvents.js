@@ -49,7 +49,7 @@ const useEvents = () => {
 
         events[id] = {
             ...events[id],
-            updatedEvent
+            ...updatedEvent
         };
 
         setState(events);
