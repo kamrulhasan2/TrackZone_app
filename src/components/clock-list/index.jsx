@@ -2,7 +2,7 @@ import ClockLIstItem from "./ClockLIstItem"
 
 const ClockList = ({clocks, updateClock, deleteClock, localClock}) => {  
   return (
-    <div>
+    <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:"center"}}>
       <h3>Other Clocks</h3>
       <hr />
 

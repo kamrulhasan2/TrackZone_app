@@ -26,8 +26,6 @@ const App = () => {
   const createClock = (clock)=>{
     clock.id = generate();
 
-    console.log(clock);
-
     setClocks([
       ...clocks,
       clock

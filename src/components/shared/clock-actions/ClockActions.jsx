@@ -14,56 +14,62 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
 
    
   return (      
-    <div>  
-        <ButtonLocal
-            text={'Edit'} 
-            onClick={() => setIsEdit(!isEdit)} 
-            color={'warning'}
-            size={'small'}
-         />
-
-        {
-            local ? (
+    <div >  
+        <div style={{display:'flex',justifyContent:'center',flexDirection:'row',alignItems:'center'}}>
                 <ButtonLocal
-                    text={'Create'} 
-                    onClick={() => setIsCreate(!isCreate)} 
-                    color={'info'}
+                    text={'Edit'} 
+                    onClick={() => setIsEdit(!isEdit)} 
+                    color={'warning'}
                     size={'small'}
                 />
-            ) : (
-                <ButtonLocal
-                    text={'Delete'} 
-                    onClick={() => deleteClock(clock.id)} 
-                    color={'info'}
-                    size={'small'}
-                />
-            )
-        }
 
-        {
-            isEdit && (
-                <>
-                    <h3>Edit Clock</h3>
-                    <ClockForm 
-                        handleClock={updateClock}
-                        edit={true}
-                        title={!local}
-                        values={clock}
-                    />
-                </>
-            )
-        }
+                {
+                    local ? (
+                        <ButtonLocal
+                            text={'Create'} 
+                            onClick={() => setIsCreate(!isCreate)} 
+                            color={'info'}
+                            size={'small'}
+                        />
+                    ) : (
+                        <ButtonLocal
+                            text={'Delete'} 
+                            onClick={() => deleteClock(clock.id)} 
+                            color={'info'}
+                            size={'small'}
+                        />
+                    )
+                }
 
-        {
-            isCreate && (
-                <>
-                    <h3>Create New Clock</h3>
-                    <ClockForm 
-                        handleClock={handleClock}
-                    />
-                </>
-            )
-        }
+        </div>
+
+        <div style={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}}>
+                {
+                    isEdit && (
+                        <>
+                            <h3>Edit Clock</h3>
+                            <ClockForm 
+                                handleClock={updateClock}
+                                edit={true}
+                                title={!local}
+                                values={clock}
+                            />
+                        </>
+                    )
+                }
+
+                {
+                    isCreate && (
+                        <>
+                            <h3>Create New Clock</h3>
+                            <ClockForm 
+                                handleClock={handleClock}
+                            />
+                        </>
+                    )
+                }
+
+        </div>
 
     </div>
   )
