@@ -30,7 +30,7 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
             deleteClock={deleteClock}
         />
 
-       <EventUI clockId={clock.id}/>
+       <EventUI clock={clock}/>
     </div>
   )
 }

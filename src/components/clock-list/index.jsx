@@ -1,33 +1,44 @@
-import ClockLIstItem from "./ClockLIstItem"
+import ClockListItem from "./ClockLIstItem";
 
-const ClockList = ({clocks, updateClock, deleteClock, localClock}) => {  
+const ClockList = ({ clocks, updateClock, deleteClock, localClock }) => {
   return (
-    <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:"center"}}>
-      <h3>Other Clocks</h3>
-      <hr />
+    <div>
+      <h3 style={{ textAlign: "center" }}>Other Clocks</h3>
 
-      {
-        ClockList.length === 0? (
-          <p>There is no clock, Please create a clock </p>
-        ) : (
-          <div>
-            {
-              clocks.map((clock)=>(
-                <ClockLIstItem
-                  key={clock.id}
-                  clock={clock}
-                  updateClock={updateClock}
-                  deleteClock={deleteClock}
-                  localClock={localClock}
-                />
-              ))
-            }
-          </div>
-        )
-      }
-
+      {clocks.length === 0 ? ( 
+        <p>There is no clock, Please create a clock</p>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap", 
+            gap: "10px",
+            justifyContent: "flex-start",
+            width: "100%", 
+          }}
+        >
+          {clocks.map((clock) => (
+            <div
+              key={clock.id}
+              style={{
+                flex: "0 0 calc(33.33% - 10px)", 
+                boxSizing: "border-box",
+                textAlign: "center",
+              }}
+            >
+              <ClockListItem
+                clock={clock}
+                updateClock={updateClock}
+                deleteClock={deleteClock}
+                localClock={localClock}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default ClockList;

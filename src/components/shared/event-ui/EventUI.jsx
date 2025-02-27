@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import useEvents from "../../../hooks/useEvents";
 
-const EventUI = ({ clockId }) => {
+const EventUI = ({ clock }) => {
   const { events, addEvent, deleteEvent, updateEvents, getEventsByClockId } = useEvents();
   const [newEvent, setNewEvent] = useState({ title: "",description:"", date: "", time: "" });
   const [open, setOpen] = useState(false);
@@ -16,7 +16,7 @@ const EventUI = ({ clockId }) => {
     if (editEventId) {
       updateEvents(newEvent, editEventId);
     } else {
-      addEvent({ ...newEvent, clockId });
+      addEvent({ ...newEvent, clockId: clock.id });
     }
     
     setNewEvent({ title: "",description:"", date: "", time: "" });
@@ -25,14 +25,14 @@ const EventUI = ({ clockId }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 500, margin: "auto", padding: 2, boxShadow: 3 }}>
+    <Card sx={{ maxWidth: 500, margin: "3rem", padding: 2, boxShadow: 3 }}>
       <CardContent>
-        <Typography variant="h5" gutterBottom>Event Tracker</Typography>
+        <Typography variant="h5" gutterBottom>Event Tracker for {clock.title}</Typography>
         <Button variant="contained" onClick={() => setOpen(true)} sx={{ mb: 2 }}>Add Event</Button>
       </CardContent>
-      {getEventsByClockId(clockId).map((eventId) => (
+      {getEventsByClockId(clock.id).map((eventId) => (
         <Card key={eventId} sx={{ margin: 1, padding: 1, boxShadow: 1 }}>
-          <CardContent sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <CardContent sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
             <div>
               <Typography variant="h5">{events[eventId].title}</Typography>
               <Typography variant="p">{events[eventId].description}</Typography>
