@@ -1,6 +1,6 @@
 import { formatDistance } from "date-fns";
 import useClock from "../../hooks/useClock";
-import ClockActions from "../shared/clock-Actions/ClockActions";
+import ClockActions from "../shared/clock-actions/ClockActions";
 import ClockDisplay from "../shared/clock-display/ClockDisplay";
 import useTimer from "../../hooks/useTimer";
 import EventUI from "../shared/event-ui/EventUI";
