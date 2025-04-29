@@ -53,7 +53,7 @@ const App = () => {
   const UnderConstruction = () => {
     return (
       <div style={{ display:"flex",justifyContent:"space-between", marginRight:"220px"}}>
-        <img src="../public/Track2one.png" alt="TrackZone" height={'100px'} width={'200px'}/>
+        <img src="/Track2one.png" alt="TrackZone" height={'100px'} width={'200px'}/>
         <h4><strong> `[Beta Version]` </strong> 
           <br />This site is under construction...
           <br />Stable version will be released soon...
