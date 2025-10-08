@@ -40,8 +40,13 @@ const useEvents = () => {
     }
 
     const deleteEventByClock = (clockId)=>{
-        const events = Object.keys(state).filter((item) => !item.startsWith(clockId));
-        setState(events);
+        const newEvents = Object.keys(state).reduce((acc, key) => {
+            if (!key.startsWith(clockId)) {
+                acc[key] = state[key];
+            }
+            return acc;
+        }, {});
+        setState(newEvents);
     }
 
     const updateEvents = (updatedEvent,id)=>{
