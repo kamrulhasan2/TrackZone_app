@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { formatDistance } from "date-fns";
 import useClock from "../../hooks/useClock";
 import ClockActions from "../shared/clock-actions/ClockActions";
@@ -12,6 +12,11 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
     const {date} = useClock(clock.timezone, clock.offset);
 
     const timer = useTimer(date);
+    
+    const timeDifference = useMemo(() => {
+        if (!localClock || !timer) return '';
+        return formatDistance(localClock, timer);
+    }, [localClock, timer]);
 
     if(!date || !timer) return null;
   return (
@@ -23,7 +28,7 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
             title={clock.title}
         />
         
-        <h3>Time Difference: {formatDistance(localClock, timer)}</h3>
+        <h3>Time Difference: {timeDifference}</h3>
 
         <ClockActions
             clock={clock}
