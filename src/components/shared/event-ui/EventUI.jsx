@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo, useCallback, useMemo } from "react";
 import { TextField, Button, Card, CardContent, Typography, IconButton, Modal, Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -10,7 +10,7 @@ const EventUI = ({ clock }) => {
   const [open, setOpen] = useState(false);
   const [editEventId, setEditEventId] = useState(null);
 
-  const handleAddOrUpdateEvent = () => {
+  const handleAddOrUpdateEvent = useCallback(() => {
     if (!newEvent.title || !newEvent.description || !newEvent.date || !newEvent.time) return;
     
     if (editEventId) {
@@ -22,15 +22,28 @@ const EventUI = ({ clock }) => {
     setNewEvent({ title: "",description:"", date: "", time: "" });
     setEditEventId(null);
     setOpen(false);
-  };
+  }, [newEvent, editEventId, updateEvents, addEvent, clock.id]);
+  
+  const handleOpenModal = useCallback(() => {
+    setOpen(true);
+  }, []);
+  
+  const handleCloseModal = useCallback(() => {
+    setOpen(false);
+    setEditEventId(null);
+  }, []);
+  
+  const eventIds = useMemo(() => {
+    return getEventsByClockId(clock.id);
+  }, [getEventsByClockId, clock.id]);
 
   return (
     <Card sx={{ maxWidth: 500, margin: "3rem", padding: 2, boxShadow: 3 }}>
       <CardContent>
         <Typography variant="h5" gutterBottom>Event Tracker for {clock.title}</Typography>
-        <Button variant="contained" onClick={() => setOpen(true)} sx={{ mb: 2 }}>Add Event</Button>
+        <Button variant="contained" onClick={handleOpenModal} sx={{ mb: 2 }}>Add Event</Button>
       </CardContent>
-      {getEventsByClockId(clock.id).map((eventId) => (
+      {eventIds.map((eventId) => (
         <Card key={eventId} sx={{ margin: 1, padding: 1, boxShadow: 1 }}>
           <CardContent sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
             <div>
@@ -53,10 +66,7 @@ const EventUI = ({ clock }) => {
           </CardContent>
         </Card>
       ))}
-      <Modal open={open} onClose={() => {
-        setOpen(false);
-        setEditEventId(null);
-      }}>
+      <Modal open={open} onClose={handleCloseModal}>
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
           <Typography variant="h6">{editEventId ? "Edit Event" : "Create Event"}</Typography>
           <TextField label="Title" fullWidth margin="normal" value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} />
@@ -70,4 +80,4 @@ const EventUI = ({ clock }) => {
   );
 };
 
-export default EventUI;
+export default memo(EventUI);
