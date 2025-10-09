@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
@@ -14,4 +15,4 @@ const ButtonLocal = ({text,onClick,color='primary',size='small'},type='button') 
   )
 }
 
-export default ButtonLocal;
+export default memo(ButtonLocal);
