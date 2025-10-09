@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import useClock from "../../hooks/useClock"
 import ClockActions from "../shared/clock-actions/ClockActions";
 import ClockDisplay  from "../shared/clock-display/ClockDisplay";
@@ -45,4 +45,4 @@ const LocalClock = ({clock , updateClock ,createClock, deleteClock}) => {
   )
 }
 
-export default LocalClock;
+export default memo(LocalClock);
