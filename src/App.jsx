@@ -53,7 +53,7 @@ const App = () => {
 
   return (
     <div>
-      <UnderConstruction />
+      {UnderConstruction}
        <LocalClock 
           clock={localClock}
           updateClock={upDateLocalClock} 
