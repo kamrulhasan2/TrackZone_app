@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { formatDistance } from "date-fns";
 import useClock from "../../hooks/useClock";
 import ClockActions from "../shared/clock-actions/ClockActions";
@@ -35,4 +36,4 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
   )
 }
 
-export default ClockLIstItem;
+export default memo(ClockLIstItem);
