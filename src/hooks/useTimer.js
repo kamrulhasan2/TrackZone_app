@@ -14,15 +14,22 @@ const useTimer = (date) => {
         return;
     }
 
+    // Clear any existing interval before creating new one
+    if (timerId.current) {
+      clearInterval(timerId.current);
+    }
+
     timerId.current = setInterval(() => {
       setTimer((prevTimer) => addSeconds(prevTimer, 1));
     }, 1000);
 
     return () => {
-      clearInterval(timerId.current);
-      timerId.current = null;
+      if (timerId.current) {
+        clearInterval(timerId.current);
+        timerId.current = null;
+      }
     };
-  }, [timer]);
+  }, [!!timer]); // Only depend on whether timer exists, not its value
 
   return timer;
 };
