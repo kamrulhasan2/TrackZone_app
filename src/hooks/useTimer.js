@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 const useTimer = (date) => {
   const [timer, setTimer] = useState(date);
   const timerId = useRef(null);
+  const isRunning = useRef(false);
 
   useEffect(() => {
     setTimer(date);
@@ -14,15 +15,22 @@ const useTimer = (date) => {
         return;
     }
 
-    timerId.current = setInterval(() => {
-      setTimer((prevTimer) => addSeconds(prevTimer, 1));
-    }, 1000);
+    // Only start interval if not already running
+    if (!isRunning.current) {
+      isRunning.current = true;
+      timerId.current = setInterval(() => {
+        setTimer((prevTimer) => addSeconds(prevTimer, 1));
+      }, 1000);
+    }
 
     return () => {
-      clearInterval(timerId.current);
-      timerId.current = null;
+      if (timerId.current) {
+        clearInterval(timerId.current);
+        timerId.current = null;
+        isRunning.current = false;
+      }
     };
-  }, [timer]);
+  }, [timer && !isRunning.current]); // Only depend on timer existence and running state
 
   return timer;
 };
