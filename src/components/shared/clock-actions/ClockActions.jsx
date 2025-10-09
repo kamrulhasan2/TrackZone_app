@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import ClockForm from "../clock-form/ClockForm";
 import ButtonLocal from "../../../ui/button/ButtonLocal";
 
@@ -8,9 +8,21 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
     const [isEdit,setIsEdit] = useState(false);
     const [isCreate,setIsCreate] = useState(false);
 
-    const handleClock = (values)=>{
+    const handleClock = useCallback((values) => {
         createClock(values);
-    }
+    }, [createClock]);
+    
+    const handleEdit = useCallback(() => {
+        setIsEdit(prev => !prev);
+    }, []);
+    
+    const handleCreate = useCallback(() => {
+        setIsCreate(prev => !prev);
+    }, []);
+    
+    const handleDelete = useCallback(() => {
+        deleteClock(clock.id);
+    }, [deleteClock, clock.id]);
 
    
   return (      
@@ -18,7 +30,7 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
         <div style={{display:'flex',justifyContent:'center',flexDirection:'row',alignItems:'center'}}>
                 <ButtonLocal
                     text={'Edit'} 
-                    onClick={() => setIsEdit(!isEdit)} 
+                    onClick={handleEdit} 
                     color={'warning'}
                     size={'small'}
                 />
@@ -27,14 +39,14 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
                     local ? (
                         <ButtonLocal
                             text={'Create'} 
-                            onClick={() => setIsCreate(!isCreate)} 
+                            onClick={handleCreate} 
                             color={'info'}
                             size={'small'}
                         />
                     ) : (
                         <ButtonLocal
                             text={'Delete'} 
-                            onClick={() => deleteClock(clock.id)} 
+                            onClick={handleDelete} 
                             color={'info'}
                             size={'small'}
                         />
@@ -75,4 +87,4 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
   )
 }
 
-export default ClockActions;
+export default memo(ClockActions);
