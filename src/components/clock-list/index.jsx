@@ -1,3 +1,4 @@
+import { memo } from "react";
 import ClockListItem from "./ClockLIstItem";
 
 const ClockList = ({ clocks, updateClock, deleteClock, localClock }) => {
@@ -41,4 +42,4 @@ const ClockList = ({ clocks, updateClock, deleteClock, localClock }) => {
   );
 };
 
-export default ClockList;
+export default memo(ClockList);
