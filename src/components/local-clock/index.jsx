@@ -1,4 +1,4 @@
-import { useEffect, memo } from "react";
+import { useEffect, memo, useCallback } from "react";
 import useClock from "../../hooks/useClock"
 import ClockActions from "../shared/clock-actions/ClockActions";
 import ClockDisplay  from "../shared/clock-display/ClockDisplay";
@@ -8,15 +8,20 @@ const LocalClock = ({clock , updateClock ,createClock, deleteClock}) => {
   const {date,offset,timezone} = useClock(clock.timezone, clock.offset);
 
   const timer = useTimer(date);
- 
   
-  useEffect(() => {
+  const memoizedUpdateClock = useCallback(() => {
     updateClock({
       date,
       timezone,
       offset,
     });
-  }, [date]);
+  }, [updateClock, date, timezone, offset]);
+ 
+  useEffect(() => {
+    if (date) {
+      memoizedUpdateClock();
+    }
+  }, [date, memoizedUpdateClock]);
   
 
   
