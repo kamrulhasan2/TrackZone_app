@@ -4,6 +4,7 @@ import { ALL_TIMEZONE_OFFSET, TIMEZONE_OFFSET } from "../../../constants/timezon
 import classes from './index.module.css'
 import SelectComonent from "../../../ui/select/SelectComonent";
 import InputComponent from "../../../ui/input/InputComponent";
+import { clockSchema } from "../../../utils/validation";
 
 
 const ClockForm = ({
@@ -14,6 +15,7 @@ const ClockForm = ({
 }) => {
 
     const [formValues, setFormValues] = useState({...values});
+    const [errors, setErrors] = useState({});
 
     useEffect(()=>{
         if(TIMEZONE_OFFSET[formValues.timezone]){
@@ -42,7 +44,17 @@ const ClockForm = ({
     const handleSubmit = (e)=>{
         e.preventDefault();
 
-        handleClock(formValues);
+        try {
+            clockSchema.validateSync(formValues, { abortEarly: false });
+            handleClock(formValues);
+            setErrors({});
+        } catch (e) {
+            const newErrors = {};
+            e.inner.forEach(err => {
+                newErrors[err.path] = err.message;
+            });
+            setErrors(newErrors);
+        }
     };
 
 
@@ -57,6 +69,7 @@ const ClockForm = ({
             disabled={!title} 
 
         />
+        {errors.title && <p style={{color: 'red'}}>{errors.title}</p>}
 
         <div>
             <SelectComonent 
@@ -68,6 +81,7 @@ const ClockForm = ({
                 maped={ALL_TIMEZONE_OFFSET}
             />
         </div>
+        {errors.timezone && <p style={{color: 'red'}}>{errors.timezone}</p>}
 
 
         {(formValues.timezone === 'GMT' || formValues.timezone === 'UTC') && (
@@ -83,6 +97,7 @@ const ClockForm = ({
              </div>
 
         )}
+        {errors.offset && <p style={{color: 'red'}}>{errors.offset}</p>}
 
         <button className={classes.btn}>{edit ? 'Update' : 'Create'}</button>
         

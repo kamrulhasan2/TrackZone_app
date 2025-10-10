@@ -3,25 +3,35 @@ import { TextField, Button, Card, CardContent, Typography, IconButton, Modal, Bo
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import useEvents from "../../../hooks/useEvents";
+import { eventSchema } from "../../../utils/validation";
 
 const EventUI = ({ clock }) => {
   const { events, addEvent, deleteEvent, updateEvents, getEventsByClockId } = useEvents();
   const [newEvent, setNewEvent] = useState({ title: "",description:"", date: "", time: "" });
   const [open, setOpen] = useState(false);
   const [editEventId, setEditEventId] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const handleAddOrUpdateEvent = useCallback(() => {
-    if (!newEvent.title || !newEvent.description || !newEvent.date || !newEvent.time) return;
-    
-    if (editEventId) {
-      updateEvents(newEvent, editEventId);
-    } else {
-      addEvent({ ...newEvent, clockId: clock.id });
+    try {
+      eventSchema.validateSync(newEvent, { abortEarly: false });
+      if (editEventId) {
+        updateEvents(newEvent, editEventId);
+      } else {
+        addEvent({ ...newEvent, clockId: clock.id });
+      }
+      
+      setNewEvent({ title: "",description:"", date: "", time: "" });
+      setEditEventId(null);
+      setOpen(false);
+      setErrors({});
+    } catch (e) {
+      const newErrors = {};
+      e.inner.forEach(err => {
+          newErrors[err.path] = err.message;
+      });
+      setErrors(newErrors);
     }
-    
-    setNewEvent({ title: "",description:"", date: "", time: "" });
-    setEditEventId(null);
-    setOpen(false);
   }, [newEvent, editEventId, updateEvents, addEvent, clock.id]);
   
   const handleOpenModal = useCallback(() => {
@@ -31,6 +41,7 @@ const EventUI = ({ clock }) => {
   const handleCloseModal = useCallback(() => {
     setOpen(false);
     setEditEventId(null);
+    setErrors({});
   }, []);
   
   const eventIds = useMemo(() => {
@@ -69,10 +80,42 @@ const EventUI = ({ clock }) => {
       <Modal open={open} onClose={handleCloseModal}>
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
           <Typography variant="h6">{editEventId ? "Edit Event" : "Create Event"}</Typography>
-          <TextField label="Title" fullWidth margin="normal" value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} />
-          <TextField label="Description" fullWidth margin="normal" value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} />
-          <TextField type="date" fullWidth margin="normal" value={newEvent.date} onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} />
-          <TextField type="time" fullWidth margin="normal" value={newEvent.time} onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })} />
+          <TextField 
+            label="Title" 
+            fullWidth 
+            margin="normal" 
+            value={newEvent.title} 
+            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} 
+            error={!!errors.title}
+            helperText={errors.title}
+          />
+          <TextField 
+            label="Description" 
+            fullWidth 
+            margin="normal" 
+            value={newEvent.description} 
+            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} 
+            error={!!errors.description}
+            helperText={errors.description}
+          />
+          <TextField 
+            type="date" 
+            fullWidth 
+            margin="normal" 
+            value={newEvent.date} 
+            onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} 
+            error={!!errors.date}
+            helperText={errors.date}
+          />
+          <TextField 
+            type="time" 
+            fullWidth 
+            margin="normal" 
+            value={newEvent.time} 
+            onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })} 
+            error={!!errors.time}
+            helperText={errors.time}
+          />
           <Button onClick={handleAddOrUpdateEvent} variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>{editEventId ? "Update Event" : "Save Event"}</Button>
         </Box>
       </Modal>
