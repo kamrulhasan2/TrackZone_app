@@ -1,1 +1,1 @@
-feat: modernize ClockList component with Tailwind CSS
+feat: modernize ClockListItem component with Tailwind CSS
