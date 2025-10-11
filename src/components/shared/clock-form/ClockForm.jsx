@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import { getOffset } from "../../../utils/timezone";
 import { ALL_TIMEZONE_OFFSET, TIMEZONE_OFFSET } from "../../../constants/timezone";
-import classes from './index.module.css'
-import SelectComonent from "../../../ui/select/SelectComonent";
-import InputComponent from "../../../ui/input/InputComponent";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { clockSchema } from "../../../utils/validation";
 
 
@@ -59,50 +60,67 @@ const ClockForm = ({
 
 
   return (
-    <form onSubmit={handleSubmit}>
-        <InputComponent 
-            text={"Enter Title"}
-            type={'text'}
-            name={'title'}
-            value={formValues.title}
-            handleChange={handleChange}
-            disabled={!title} 
-
-        />
-        {errors.title && <p style={{color: 'red'}}>{errors.title}</p>}
-
-        <div>
-            <SelectComonent 
-                formValues={formValues} 
-                text={'Enter Timezone'}
-                name={"timezone"}
-                value={formValues.timezone}
-                handleChange={handleChange} 
-                maped={ALL_TIMEZONE_OFFSET}
+    <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+            <Label htmlFor="title">Enter Title</Label>
+            <Input 
+                type="text"
+                id="title"
+                name="title"
+                value={formValues.title}
+                onChange={handleChange}
+                disabled={!title} 
             />
+            {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
-        {errors.timezone && <p style={{color: 'red'}}>{errors.timezone}</p>}
 
+        <div className="space-y-2">
+            <Label htmlFor="timezone">Enter Timezone</Label>
+            <Select
+                name="timezone"
+                value={formValues.timezone}
+                onValueChange={(value) => handleChange({ target: { name: "timezone", value } })}
+            >
+                <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a timezone" />
+                </SelectTrigger>
+                <SelectContent>
+                    {Object.keys(ALL_TIMEZONE_OFFSET).map((timezone) => (
+                        <SelectItem key={timezone} value={timezone}>
+                            {timezone}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            {errors.timezone && <p className="text-red-500 text-sm">{errors.timezone}</p>}
+        </div>
 
         {(formValues.timezone === 'GMT' || formValues.timezone === 'UTC') && (
-            <div>
-                <SelectComonent 
-                    formValues={formValues} 
-                    handleChange={handleChange} 
-                    text={'Enter Offset'}
-                    name={"offset"}
+            <div className="space-y-2">
+                <Label htmlFor="offset">Enter Offset</Label>
+                <Select
+                    name="offset"
                     value={formValues.offset / 60}
-                    maped={getOffset()}
-                />
+                    onValueChange={(value) => handleChange({ target: { name: "offset", value } })}
+                >
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select an offset" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {getOffset().map((offset) => (
+                            <SelectItem key={offset} value={offset}>
+                                {offset}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
              </div>
-
         )}
-        {errors.offset && <p style={{color: 'red'}}>{errors.offset}</p>}
+        {errors.offset && <p className="text-red-500 text-sm">{errors.offset}</p>}
 
-        <button className={classes.btn}>{edit ? 'Update' : 'Create'}</button>
-        
+        <Button type="submit" className="w-full">
+            {edit ? 'Update' : 'Create'}
+        </Button>
     </form>
   )
 }
-
-export default ClockForm;

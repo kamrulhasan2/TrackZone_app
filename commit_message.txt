@@ -1,1 +1,1 @@
-feat: modernize ClockDisplay component with Tailwind CSS
+feat: modernize ClockForm component with Tailwind CSS and shadcn components
