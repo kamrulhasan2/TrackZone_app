@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from "react"
 import ClockList from "./components/clock-list"
 import LocalClock from "./components/local-clock"
 import { generate } from "shortid";
+import './App.css';
 
 
 
@@ -53,6 +54,7 @@ const App = () => {
 
   return (
     <div>
+      <h1 className="mt-100">TrackZone</h1>
       {UnderConstruction}
        <LocalClock 
           clock={localClock}
