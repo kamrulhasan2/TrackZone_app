@@ -1,1 +1,1 @@
-feat: modernize EventUI component with Tailwind CSS and shadcn components
+refactor: remove unused UI components
