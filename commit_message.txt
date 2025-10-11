@@ -1,1 +1,1 @@
-feat: modernize ClockForm component with Tailwind CSS and shadcn components
+feat: modernize EventUI component with Tailwind CSS and shadcn components
