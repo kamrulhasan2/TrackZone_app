@@ -1,8 +1,6 @@
 import { useState, memo, useCallback } from "react";
 import ClockForm from "../clock-form/ClockForm";
-import ButtonLocal from "../../../ui/button/ButtonLocal";
-
-
+import { Button } from "@/components/ui/button";
 
 const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock}) => {
     const [isEdit,setIsEdit] = useState(false);
@@ -26,63 +24,44 @@ const ClockActions = ({local=false, clock,updateClock,createClock, deleteClock})
 
    
   return (      
-    <div >  
-        <div style={{display:'flex',justifyContent:'center',flexDirection:'row',alignItems:'center'}}>
-                <ButtonLocal
-                    text={'Edit'} 
-                    onClick={handleEdit} 
-                    color={'warning'}
-                    size={'small'}
-                />
-
+    <div className="space-y-4 mt-4">
+        <div className="flex justify-center space-x-4">
+                <Button onClick={handleEdit}>Edit</Button>
                 {
                     local ? (
-                        <ButtonLocal
-                            text={'Create'} 
-                            onClick={handleCreate} 
-                            color={'info'}
-                            size={'small'}
-                        />
+                        <Button onClick={handleCreate}>Create</Button>
                     ) : (
-                        <ButtonLocal
-                            text={'Delete'} 
-                            onClick={handleDelete} 
-                            color={'info'}
-                            size={'small'}
-                        />
+                        <Button onClick={handleDelete} variant="destructive">Delete</Button>
                     )
                 }
-
         </div>
 
-        <div style={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}}>
+        <div className="space-y-4">
                 {
                     isEdit && (
-                        <>
-                            <h3>Edit Clock</h3>
+                        <div className="p-4 border rounded-md">
+                            <h3 className="text-lg font-semibold mb-2 text-center">Edit Clock</h3>
                             <ClockForm 
                                 handleClock={updateClock}
                                 edit={true}
                                 title={!local}
                                 values={clock}
                             />
-                        </>
+                        </div>
                     )
                 }
 
                 {
                     isCreate && (
-                        <>
-                            <h3>Create New Clock</h3>
+                        <div className="p-4 border rounded-md">
+                            <h3 className="text-lg font-semibold mb-2 text-center">Create New Clock</h3>
                             <ClockForm 
                                 handleClock={handleClock}
                             />
-                        </>
+                        </div>
                     )
                 }
-
         </div>
-
     </div>
   )
 }
