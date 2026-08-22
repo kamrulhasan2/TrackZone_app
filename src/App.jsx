@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react"
 import ClockList from "./components/clock-list"
 import LocalClock from "./components/local-clock"
 import CalendarView from "./components/shared/calendar-view/CalendarView"
+import TimezoneListView from "./components/shared/timezone-list/TimezoneListView"
 import useEvents from "./hooks/useEvents"
 import { generate } from "shortid";
 import { 
@@ -138,10 +139,17 @@ const App = () => {
               <Calendar className="h-4 w-4" />
               <span>Events Calendar</span>
             </button>
-            <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-secondary/40 hover:text-foreground transition duration-200">
+            <button 
+              onClick={() => setActiveView("timezones")}
+              className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                activeView === "timezones" 
+                  ? "bg-secondary text-secondary-foreground" 
+                  : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+              }`}
+            >
               <Globe className="h-4 w-4" />
               <span>Timezones list</span>
-            </a>
+            </button>
             <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-secondary/40 hover:text-foreground transition duration-200">
               <Settings className="h-4 w-4" />
               <span>Workspace Settings</span>
@@ -214,6 +222,17 @@ const App = () => {
                   <Calendar className="h-4 w-4" />
                   <span>Events Calendar</span>
                 </button>
+                <button 
+                  onClick={() => { setActiveView("timezones"); setMobileMenuOpen(false); }}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                    activeView === "timezones" 
+                      ? "bg-secondary text-secondary-foreground" 
+                      : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+                  }`}
+                >
+                  <Globe className="h-4 w-4" />
+                  <span>Timezones list</span>
+                </button>
                 <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground">
                   <Globe className="h-4 w-4" />
                   <span>Timezones list</span>
@@ -257,7 +276,9 @@ const App = () => {
               <span className="text-border">/</span>
               <span>Clocks</span>
               <span className="text-border">/</span>
-              <span className="text-foreground capitalize">{activeView === "dashboard" ? "Dashboard" : "Events Calendar"}</span>
+              <span className="text-foreground capitalize">
+                {activeView === "dashboard" ? "Dashboard" : activeView === "calendar" ? "Events Calendar" : "Timezones List"}
+              </span>
             </div>
           </div>
 
@@ -303,12 +324,14 @@ const App = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-border/40">
             <div>
               <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent">
-                {activeView === "dashboard" ? "TrackZone Dashboard" : "Scheduled Events Calendar"}
+                {activeView === "dashboard" ? "TrackZone Dashboard" : activeView === "calendar" ? "Scheduled Events Calendar" : "Timezone Directory"}
               </h1>
               <p className="text-sm text-muted-foreground mt-1">
                 {activeView === "dashboard" 
                   ? "Real-time world clock coordinator and event scheduler." 
-                  : "Organize, schedule, and coordinate cross-timezone calendar events."}
+                  : activeView === "calendar"
+                    ? "Organize, schedule, and coordinate cross-timezone calendar events."
+                    : "Browse global offsets, inspect real-time hours, and pin locations to track."}
               </p>
             </div>
             
@@ -350,12 +373,20 @@ const App = () => {
                 />
               </div>
             </div>
-          ) : (
+          ) : activeView === "calendar" ? (
             <div className="animate-in fade-in-50 duration-200">
               <CalendarView 
                 clocks={clocks}
                 localClock={localClock}
                 eventsManager={eventsManager}
+              />
+            </div>
+          ) : (
+            <div className="animate-in fade-in-50 duration-200">
+              <TimezoneListView 
+                clocks={clocks}
+                localClock={localClock}
+                createClock={createClock}
               />
             </div>
           )}
