@@ -6,8 +6,6 @@ import ClockDisplay from "../shared/clock-display/ClockDisplay";
 import useTimer from "../../hooks/useTimer";
 import EventUI from "../shared/event-ui/EventUI";
 
-
-
 const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
     const {date} = useClock(clock.timezone, clock.offset);
 
@@ -19,24 +17,35 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
     }, [localClock, timer]);
 
     if(!date || !timer) return null;
+    
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <ClockDisplay
-            date={timer}
-            offset={clock.offset}
-            timezone={clock.timezone}
-            title={clock.title}
-        />
-        
-        <h3 className="text-lg font-semibold text-center text-gray-800 dark:text-white mb-2">Time Difference: {timeDifference}</h3>
+    <div className="bg-card/45 backdrop-blur-md border border-border/55 rounded-xl p-5 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 flex flex-col justify-between h-full">
+        <div className="space-y-4">
+            <ClockDisplay
+                date={timer}
+                offset={clock.offset}
+                timezone={clock.timezone}
+                title={clock.title}
+            />
+            
+            {/* Time Difference Tag */}
+            {timeDifference && (
+              <div className="px-3 py-2 rounded-lg bg-secondary/50 border border-border/40 flex items-center justify-between text-xs text-muted-foreground">
+                <span className="font-medium">Offset from Local</span>
+                <span className="font-semibold text-foreground">{timeDifference}</span>
+              </div>
+            )}
+        </div>
 
-        <ClockActions
-            clock={clock}
-            updateClock={updateClock}
-            deleteClock={deleteClock}
-        />
+        <div className="mt-4 pt-4 border-t border-border/40 space-y-4">
+            <ClockActions
+                clock={clock}
+                updateClock={updateClock}
+                deleteClock={deleteClock}
+            />
 
-       <EventUI clock={clock}/>
+            <EventUI clock={clock}/>
+        </div>
     </div>
   )
 }

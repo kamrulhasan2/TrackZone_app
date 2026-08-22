@@ -1,35 +1,74 @@
 import { format } from 'date-fns';
 import React, { memo, useMemo } from 'react'
+import { Sun, Moon, Calendar, Globe } from "lucide-react";
 
-
-const ClockDisplay = ({ date, title, timezone, offset}) => {
+const ClockDisplay = ({ date, title, timezone, offset }) => {
     const offsetHr = useMemo(() => offset / 60, [offset]);
     
     const formattedDate = useMemo(() => {
         if (!date) return '';
-        return format(date, 'yyyy-MM-dd');
+        return format(date, 'eeee, MMMM d, yyyy');
     }, [date]);
     
     const formattedTime = useMemo(() => {
         if (!date) return '';
-        return format(date, ' hh:mm:ss aaa');
+        return format(date, 'hh:mm:ss a');
     }, [date]);
     
     const offsetDisplay = useMemo(() => {
-        return offsetHr > 0 ? `+${Math.abs(offsetHr)}` : `-${Math.abs(offsetHr)}`;
+        if (offsetHr === 0) return 'UTC';
+        return offsetHr > 0 ? `UTC +${Math.abs(offsetHr)}` : `UTC -${Math.abs(offsetHr)}`;
     }, [offsetHr]);
 
-    return (
-        <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md text-center">
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Title: {title}</h1>
-            <h3 className="text-lg text-gray-700 dark:text-gray-200"><span>Date : </span>{formattedDate}</h3>
-            <h3 className="text-lg text-gray-700 dark:text-gray-200"><span>Time : </span>{formattedTime}</h3>
+    const isDay = useMemo(() => {
+        if (!date) return true;
+        const hour = date.getHours();
+        return hour >= 6 && hour < 18;
+    }, [date]);
 
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-                <span>Timezone: </span>
-                {timezone}
-                {offsetDisplay}
-            </p>
+    return (
+        <div className="flex flex-col space-y-4 text-left p-2">
+            
+            {/* Header info / Title & Day-Night Badge */}
+            <div className="flex items-center justify-between border-b border-border/40 pb-3">
+                <div className="space-y-0.5">
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Location / Title</span>
+                    <h3 className="text-lg font-bold text-foreground tracking-tight">{title}</h3>
+                </div>
+
+                <div className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
+                    isDay 
+                      ? 'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400' 
+                      : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400'
+                }`}>
+                    {isDay ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+                    <span>{isDay ? 'Day' : 'Night'}</span>
+                </div>
+            </div>
+
+            {/* Main Clock Face */}
+            <div className="space-y-1">
+                <div className="text-3xl sm:text-4xl font-extrabold font-mono tracking-wider text-foreground select-all bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                    {formattedTime}
+                </div>
+                
+                <div className="flex items-center space-x-1.5 text-xs text-muted-foreground">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>{formattedDate}</span>
+                </div>
+            </div>
+
+            {/* Timezone badge details */}
+            <div className="flex items-center space-x-2 pt-1">
+                <div className="flex items-center space-x-1 px-2 py-0.5 rounded bg-secondary/80 border border-border/40 text-[10px] font-semibold tracking-wide text-secondary-foreground">
+                    <Globe className="h-3 w-3 opacity-70" />
+                    <span>{timezone}</span>
+                </div>
+                <div className="text-[10px] font-semibold text-muted-foreground uppercase">
+                    {offsetDisplay}
+                </div>
+            </div>
+            
         </div>
     )
 }
