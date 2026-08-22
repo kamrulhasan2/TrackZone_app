@@ -10,10 +10,8 @@ const ClockList = ({ clocks, updateClock, deleteClock, localClock }) => {
         <p>There is no clock, Please create a clock</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        >
           {clocks.map((clock) => (
             <div key={clock.id}>
-            >
               <ClockListItem
                 clock={clock}
                 updateClock={updateClock}

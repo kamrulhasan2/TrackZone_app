@@ -124,3 +124,5 @@ const ClockForm = ({
     </form>
   )
 }
+
+export default ClockForm;
