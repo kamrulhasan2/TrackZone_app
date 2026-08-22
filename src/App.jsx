@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect } from "react"
 import ClockList from "./components/clock-list"
 import LocalClock from "./components/local-clock"
+import CalendarView from "./components/shared/calendar-view/CalendarView"
+import useEvents from "./hooks/useEvents"
 import { generate } from "shortid";
 import { 
   Globe, 
@@ -17,6 +19,7 @@ import {
 } from "lucide-react";
 
 const LOCAL_CLOCK_INIT = {
+  id: "local",
   title: 'My Clock',
   timezone: '',
   offset: 0,
@@ -27,6 +30,12 @@ const App = () => {
   const [localClock, setLocalClock] = useState({ ...LOCAL_CLOCK_INIT });
   const [clocks, setClocks] = useState([]);
   
+  // Lifted events manager
+  const eventsManager = useEvents();
+
+  // Navigation tab switcher state
+  const [activeView, setActiveView] = useState("dashboard");
+
   // Theme state & persistence
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("trackzone-theme") || "light";
@@ -107,14 +116,28 @@ const App = () => {
 
           {/* Sidebar Nav */}
           <nav className="space-y-1">
-            <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md bg-secondary text-secondary-foreground transition duration-200">
+            <button 
+              onClick={() => setActiveView("dashboard")}
+              className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                activeView === "dashboard" 
+                  ? "bg-secondary text-secondary-foreground" 
+                  : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+              }`}
+            >
               <Clock className="h-4 w-4" />
               <span>Dashboard</span>
-            </a>
-            <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-secondary/40 hover:text-foreground transition duration-200">
+            </button>
+            <button 
+              onClick={() => setActiveView("calendar")}
+              className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                activeView === "calendar" 
+                  ? "bg-secondary text-secondary-foreground" 
+                  : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+              }`}
+            >
               <Calendar className="h-4 w-4" />
               <span>Events Calendar</span>
-            </a>
+            </button>
             <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-secondary/40 hover:text-foreground transition duration-200">
               <Globe className="h-4 w-4" />
               <span>Timezones list</span>
@@ -127,7 +150,7 @@ const App = () => {
         </div>
 
         {/* System Status pulse */}
-        <div className="pt-4 border-t border-border/50">
+        <div className="pt-4 border-t border-border/55">
           <div className="flex items-center space-x-2 px-2 text-xs text-muted-foreground">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -169,14 +192,28 @@ const App = () => {
               </div>
 
               <nav className="space-y-1">
-                <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md bg-secondary text-secondary-foreground">
+                <button 
+                  onClick={() => { setActiveView("dashboard"); setMobileMenuOpen(false); }}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                    activeView === "dashboard" 
+                      ? "bg-secondary text-secondary-foreground" 
+                      : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+                  }`}
+                >
                   <Clock className="h-4 w-4" />
                   <span>Dashboard</span>
-                </a>
-                <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground">
+                </button>
+                <button 
+                  onClick={() => { setActiveView("calendar"); setMobileMenuOpen(false); }}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                    activeView === "calendar" 
+                      ? "bg-secondary text-secondary-foreground" 
+                      : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+                  }`}
+                >
                   <Calendar className="h-4 w-4" />
                   <span>Events Calendar</span>
-                </a>
+                </button>
                 <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground">
                   <Globe className="h-4 w-4" />
                   <span>Timezones list</span>
@@ -188,7 +225,7 @@ const App = () => {
               </nav>
             </div>
 
-            <div className="pt-4 border-t border-border/50">
+            <div className="pt-4 border-t border-border/55">
               <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -220,7 +257,7 @@ const App = () => {
               <span className="text-border">/</span>
               <span>Clocks</span>
               <span className="text-border">/</span>
-              <span className="text-foreground">Dashboard</span>
+              <span className="text-foreground capitalize">{activeView === "dashboard" ? "Dashboard" : "Events Calendar"}</span>
             </div>
           </div>
 
@@ -266,10 +303,12 @@ const App = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-border/40">
             <div>
               <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent">
-                TrackZone
+                {activeView === "dashboard" ? "TrackZone Dashboard" : "Scheduled Events Calendar"}
               </h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Real-time world clock coordinator and event scheduler.
+                {activeView === "dashboard" 
+                  ? "Real-time world clock coordinator and event scheduler." 
+                  : "Organize, schedule, and coordinate cross-timezone calendar events."}
               </p>
             </div>
             
@@ -285,27 +324,41 @@ const App = () => {
             </div>
           </div>
 
-          {/* Local clock / primary region */}
-          <div>
-            <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Primary timezone</h2>
-            <LocalClock 
-              clock={localClock}
-              updateClock={upDateLocalClock} 
-              createClock={createClock}
-              deleteClock={deleteClock}
-            />
-          </div>
+          {/* Conditional View Rendering */}
+          {activeView === "dashboard" ? (
+            <div className="space-y-8 animate-in fade-in-50 duration-200">
+              {/* Local clock / primary region */}
+              <div>
+                <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Primary timezone</h2>
+                <LocalClock 
+                  clock={localClock}
+                  updateClock={upDateLocalClock} 
+                  createClock={createClock}
+                  deleteClock={deleteClock}
+                />
+              </div>
 
-          {/* Clock List region */}
-          <div>
-            <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Secondary trackings</h2>
-            <ClockList 
-              clocks={clocks}
-              updateClock={updateClock}
-              deleteClock={deleteClock}
-              localClock={localClock.date}
-            />
-          </div>
+              {/* Clock List region */}
+              <div>
+                <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Secondary trackings</h2>
+                <ClockList 
+                  clocks={clocks}
+                  updateClock={updateClock}
+                  deleteClock={deleteClock}
+                  localClock={localClock.date}
+                  eventsManager={eventsManager}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="animate-in fade-in-50 duration-200">
+              <CalendarView 
+                clocks={clocks}
+                localClock={localClock}
+                eventsManager={eventsManager}
+              />
+            </div>
+          )}
           
         </main>
       </div>

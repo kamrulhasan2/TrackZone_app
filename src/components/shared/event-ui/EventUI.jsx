@@ -3,12 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useEvents from "../../../hooks/useEvents";
 import { eventSchema } from "../../../utils/validation";
 import { Trash2, Edit2, Plus, CalendarDays } from "lucide-react";
 
-const EventUI = ({ clock }) => {
-  const { events, addEvent, deleteEvent, updateEvents, getEventsByClockId } = useEvents();
+const EventUI = ({ clock, eventsManager }) => {
+  const { events, addEvent, deleteEvent, updateEvents, getEventsByClockId } = eventsManager;
   const [newEvent, setNewEvent] = useState({ title: "", description: "", date: "", time: "" });
   const [open, setOpen] = useState(false);
   const [editEventId, setEditEventId] = useState(null);

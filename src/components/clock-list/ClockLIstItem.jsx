@@ -6,7 +6,7 @@ import ClockDisplay from "../shared/clock-display/ClockDisplay";
 import useTimer from "../../hooks/useTimer";
 import EventUI from "../shared/event-ui/EventUI";
 
-const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
+const ClockLIstItem = ({clock, updateClock, deleteClock, localClock, eventsManager}) => {
     const {date} = useClock(clock.timezone, clock.offset);
 
     const timer = useTimer(date);
@@ -44,7 +44,7 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
                 deleteClock={deleteClock}
             />
 
-            <EventUI clock={clock}/>
+            <EventUI clock={clock} eventsManager={eventsManager}/>
         </div>
     </div>
   )
