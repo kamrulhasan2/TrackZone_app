@@ -2,7 +2,7 @@ import { memo } from "react";
 import ClockListItem from "./ClockLIstItem";
 import { Globe } from "lucide-react";
 
-const ClockList = ({ clocks, updateClock, deleteClock, localClock, eventsManager }) => {
+const ClockList = ({ clocks, updateClock, deleteClock, localClock, eventsManager, showOffsetBadge = true }) => {
   return (
     <div className="space-y-4">
       {clocks.length === 0 ? ( 
@@ -27,6 +27,7 @@ const ClockList = ({ clocks, updateClock, deleteClock, localClock, eventsManager
                 deleteClock={deleteClock}
                 localClock={localClock}
                 eventsManager={eventsManager}
+                showOffsetBadge={showOffsetBadge}
               />
             </div>
           ))}

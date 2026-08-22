@@ -3,6 +3,7 @@ import ClockList from "./components/clock-list"
 import LocalClock from "./components/local-clock"
 import CalendarView from "./components/shared/calendar-view/CalendarView"
 import TimezoneListView from "./components/shared/timezone-list/TimezoneListView"
+import WorkspaceSettingsView from "./components/shared/settings-view/WorkspaceSettingsView"
 import useEvents from "./hooks/useEvents"
 import { generate } from "shortid";
 import { 
@@ -37,6 +38,24 @@ const App = () => {
   // Navigation tab switcher state
   const [activeView, setActiveView] = useState("dashboard");
 
+  // Profile States
+  const [profileName, setProfileName] = useState(() => {
+    return localStorage.getItem("trackzone-profile-name") || "John Doe";
+  });
+  const [profileInitials, setProfileInitials] = useState(() => {
+    return localStorage.getItem("trackzone-profile-initials") || "JD";
+  });
+
+  // Preference States
+  const [showLivePulse, setShowLivePulse] = useState(() => {
+    const saved = localStorage.getItem("trackzone-show-live-pulse");
+    return saved === null ? true : saved === "true";
+  });
+  const [showOffsetBadge, setShowOffsetBadge] = useState(() => {
+    const saved = localStorage.getItem("trackzone-show-offset-badge");
+    return saved === null ? true : saved === "true";
+  });
+
   // Theme state & persistence
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("trackzone-theme") || "light";
@@ -53,6 +72,14 @@ const App = () => {
     }
     localStorage.setItem("trackzone-theme", theme);
   }, [theme]);
+
+  // Sync profile and preferences to localStorage
+  useEffect(() => {
+    localStorage.setItem("trackzone-profile-name", profileName);
+    localStorage.setItem("trackzone-profile-initials", profileInitials);
+    localStorage.setItem("trackzone-show-live-pulse", String(showLivePulse));
+    localStorage.setItem("trackzone-show-offset-badge", String(showOffsetBadge));
+  }, [profileName, profileInitials, showLivePulse, showOffsetBadge]);
 
   const toggleTheme = useCallback(() => {
     setTheme(prev => (prev === "light" ? "dark" : "light"));
@@ -150,10 +177,17 @@ const App = () => {
               <Globe className="h-4 w-4" />
               <span>Timezones list</span>
             </button>
-            <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-secondary/40 hover:text-foreground transition duration-200">
+            <button 
+              onClick={() => setActiveView("settings")}
+              className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                activeView === "settings" 
+                  ? "bg-secondary text-secondary-foreground" 
+                  : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+              }`}
+            >
               <Settings className="h-4 w-4" />
               <span>Workspace Settings</span>
-            </a>
+            </button>
           </nav>
         </div>
 
@@ -233,14 +267,17 @@ const App = () => {
                   <Globe className="h-4 w-4" />
                   <span>Timezones list</span>
                 </button>
-                <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground">
-                  <Globe className="h-4 w-4" />
-                  <span>Timezones list</span>
-                </a>
-                <a href="#" className="flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground">
+                <button 
+                  onClick={() => { setActiveView("settings"); setMobileMenuOpen(false); }}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-md transition duration-200 ${
+                    activeView === "settings" 
+                      ? "bg-secondary text-secondary-foreground" 
+                      : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground"
+                  }`}
+                >
                   <Settings className="h-4 w-4" />
                   <span>Workspace Settings</span>
-                </a>
+                </button>
               </nav>
             </div>
 
@@ -277,7 +314,7 @@ const App = () => {
               <span>Clocks</span>
               <span className="text-border">/</span>
               <span className="text-foreground capitalize">
-                {activeView === "dashboard" ? "Dashboard" : activeView === "calendar" ? "Events Calendar" : "Timezones List"}
+                {activeView === "dashboard" ? "Dashboard" : activeView === "calendar" ? "Events Calendar" : activeView === "timezones" ? "Timezones List" : "Workspace Settings"}
               </span>
             </div>
           </div>
@@ -310,9 +347,9 @@ const App = () => {
             {/* User Profile Avatar Mockup */}
             <div className="flex items-center space-x-2 pl-2 border-l border-border/60">
               <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 text-white flex items-center justify-center font-bold text-xs ring-2 ring-background ring-offset-2 ring-offset-primary/10">
-                JD
+                {profileInitials}
               </div>
-              <span className="hidden lg:inline text-xs font-semibold">John Doe</span>
+              <span className="hidden lg:inline text-xs font-semibold">{profileName}</span>
             </div>
           </div>
         </header>
@@ -324,14 +361,16 @@ const App = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-border/40">
             <div>
               <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text text-transparent">
-                {activeView === "dashboard" ? "TrackZone Dashboard" : activeView === "calendar" ? "Scheduled Events Calendar" : "Timezone Directory"}
+                {activeView === "dashboard" ? "TrackZone Dashboard" : activeView === "calendar" ? "Scheduled Events Calendar" : activeView === "timezones" ? "Timezone Directory" : "Workspace Settings"}
               </h1>
               <p className="text-sm text-muted-foreground mt-1">
                 {activeView === "dashboard" 
                   ? "Real-time world clock coordinator and event scheduler." 
                   : activeView === "calendar"
                     ? "Organize, schedule, and coordinate cross-timezone calendar events."
-                    : "Browse global offsets, inspect real-time hours, and pin locations to track."}
+                    : activeView === "timezones"
+                      ? "Browse global offsets, inspect real-time hours, and pin locations to track."
+                      : "Configure user profiles, manage visual preferences, and control database states."}
               </p>
             </div>
             
@@ -358,6 +397,7 @@ const App = () => {
                   updateClock={upDateLocalClock} 
                   createClock={createClock}
                   deleteClock={deleteClock}
+                  showLivePulse={showLivePulse}
                 />
               </div>
 
@@ -370,6 +410,7 @@ const App = () => {
                   deleteClock={deleteClock}
                   localClock={localClock.date}
                   eventsManager={eventsManager}
+                  showOffsetBadge={showOffsetBadge}
                 />
               </div>
             </div>
@@ -381,12 +422,30 @@ const App = () => {
                 eventsManager={eventsManager}
               />
             </div>
-          ) : (
+          ) : activeView === "timezones" ? (
             <div className="animate-in fade-in-50 duration-200">
               <TimezoneListView 
                 clocks={clocks}
                 localClock={localClock}
                 createClock={createClock}
+              />
+            </div>
+          ) : (
+            <div className="animate-in fade-in-50 duration-200">
+              <WorkspaceSettingsView 
+                clocks={clocks}
+                setClocks={setClocks}
+                localClock={localClock}
+                setLocalClock={setLocalClock}
+                eventsManager={eventsManager}
+                profileName={profileName}
+                setProfileName={setProfileName}
+                profileInitials={profileInitials}
+                setProfileInitials={setProfileInitials}
+                showLivePulse={showLivePulse}
+                setShowLivePulse={setShowLivePulse}
+                showOffsetBadge={showOffsetBadge}
+                setShowOffsetBadge={setShowOffsetBadge}
               />
             </div>
           )}
