@@ -6,7 +6,7 @@ import ClockDisplay from "../shared/clock-display/ClockDisplay";
 import useTimer from "../../hooks/useTimer";
 import EventUI from "../shared/event-ui/EventUI";
 
-const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
+const ClockLIstItem = ({clock, updateClock, deleteClock, localClock, eventsManager, showOffsetBadge = true}) => {
     const {date} = useClock(clock.timezone, clock.offset);
 
     const timer = useTimer(date);
@@ -29,7 +29,7 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
             />
             
             {/* Time Difference Tag */}
-            {timeDifference && (
+            {showOffsetBadge && timeDifference && (
               <div className="px-3 py-2 rounded-lg bg-secondary/50 border border-border/40 flex items-center justify-between text-xs text-muted-foreground">
                 <span className="font-medium">Offset from Local</span>
                 <span className="font-semibold text-foreground">{timeDifference}</span>
@@ -44,7 +44,7 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
                 deleteClock={deleteClock}
             />
 
-            <EventUI clock={clock}/>
+            <EventUI clock={clock} eventsManager={eventsManager}/>
         </div>
     </div>
   )

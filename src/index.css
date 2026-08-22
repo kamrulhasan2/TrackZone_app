@@ -50,6 +50,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  button, 
+  [role="button"],
+  select,
+  a {
+    cursor: pointer;
+  }
+  button:disabled,
+  a:disabled {
+    cursor: not-allowed;
+  }
 }
 
 :root {
