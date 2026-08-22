@@ -1,9 +1,12 @@
 import { useState, memo, useCallback, useMemo } from "react";
-import { TextField, Button, Card, CardContent, Typography, IconButton, Modal, Box } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import useEvents from "../../../hooks/useEvents";
 import { eventSchema } from "../../../utils/validation";
+import { Trash2, Edit } from "lucide-react";
 
 const EventUI = ({ clock }) => {
   const { events, addEvent, deleteEvent, updateEvents, getEventsByClockId } = useEvents();
@@ -49,76 +52,98 @@ const EventUI = ({ clock }) => {
   }, [getEventsByClockId, clock.id]);
 
   return (
-    <Card sx={{ maxWidth: 500, margin: "3rem", padding: 2, boxShadow: 3 }}>
+    <Card className="w-full max-w-md mx-auto mt-8">
+      <CardHeader>
+        <CardTitle>Event Tracker for {clock.title}</CardTitle>
+      </CardHeader>
       <CardContent>
-        <Typography variant="h5" gutterBottom>Event Tracker for {clock.title}</Typography>
-        <Button variant="contained" onClick={handleOpenModal} sx={{ mb: 2 }}>Add Event</Button>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="mb-4">Add Event</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>{editEventId ? "Edit Event" : "Create Event"}</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="title">Title</Label>
+                <Input 
+                  id="title" 
+                  value={newEvent.title} 
+                  onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} 
+                />
+                {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="description">Description</Label>
+                <Input 
+                  id="description" 
+                  value={newEvent.description} 
+                  onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} 
+                />
+                {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="date">Date</Label>
+                <Input 
+                  id="date" 
+                  type="date" 
+                  value={newEvent.date} 
+                  onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} 
+                />
+                {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="time">Time</Label>
+                <Input 
+                  id="time" 
+                  type="time" 
+                  value={newEvent.time} 
+                  onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })} 
+                />
+                {errors.time && <p className="text-red-500 text-sm">{errors.time}</p>}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleAddOrUpdateEvent}>
+                {editEventId ? "Update Event" : "Save Event"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
       {eventIds.map((eventId) => (
-        <Card key={eventId} sx={{ margin: 1, padding: 1, boxShadow: 1 }}>
-          <CardContent sx={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+        <Card key={eventId} className="mt-2">
+          <CardContent className="flex justify-between items-center">
             <div>
-              <Typography variant="h5">{events[eventId].title}</Typography>
-              <Typography variant="p">{events[eventId].description}</Typography>
-              <Typography variant="body2" color="textSecondary">{events[eventId].date} {events[eventId].time}</Typography>
+              <p className="text-lg font-semibold">{events[eventId].title}</p>
+              <p className="text-sm text-gray-600">{events[eventId].description}</p>
+              <p className="text-xs text-gray-500">{events[eventId].date} {events[eventId].time}</p>
             </div>
-            <div>
-              <IconButton onClick={() => {
-                setNewEvent(events[eventId]);
-                setEditEventId(eventId);
-                setOpen(true);
-              }} color="primary">
-                <EditIcon />
-              </IconButton>
-              <IconButton onClick={() => deleteEvent(eventId)} color="error">
-                <DeleteIcon />
-              </IconButton>
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  setNewEvent(events[eventId]);
+                  setEditEventId(eventId);
+                  setOpen(true);
+                }}
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() => deleteEvent(eventId)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             </div>
           </CardContent>
         </Card>
       ))}
-      <Modal open={open} onClose={handleCloseModal}>
-        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2 }}>
-          <Typography variant="h6">{editEventId ? "Edit Event" : "Create Event"}</Typography>
-          <TextField 
-            label="Title" 
-            fullWidth 
-            margin="normal" 
-            value={newEvent.title} 
-            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} 
-            error={!!errors.title}
-            helperText={errors.title}
-          />
-          <TextField 
-            label="Description" 
-            fullWidth 
-            margin="normal" 
-            value={newEvent.description} 
-            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} 
-            error={!!errors.description}
-            helperText={errors.description}
-          />
-          <TextField 
-            type="date" 
-            fullWidth 
-            margin="normal" 
-            value={newEvent.date} 
-            onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} 
-            error={!!errors.date}
-            helperText={errors.date}
-          />
-          <TextField 
-            type="time" 
-            fullWidth 
-            margin="normal" 
-            value={newEvent.time} 
-            onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })} 
-            error={!!errors.time}
-            helperText={errors.time}
-          />
-          <Button onClick={handleAddOrUpdateEvent} variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>{editEventId ? "Update Event" : "Save Event"}</Button>
-        </Box>
-      </Modal>
     </Card>
   );
 };

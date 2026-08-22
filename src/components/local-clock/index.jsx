@@ -26,7 +26,7 @@ const LocalClock = ({clock , updateClock ,createClock, deleteClock}) => {
 
   
   return (
-    <div>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
           {
             timer && (
               <ClockDisplay 

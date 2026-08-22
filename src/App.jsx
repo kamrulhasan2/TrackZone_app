@@ -5,6 +5,7 @@ import { generate } from "shortid";
 
 
 
+
 const  LOCAL_CLOCK_INIT = {
   title: 'My Clock',
   timezone: '',
@@ -40,20 +41,21 @@ const App = () => {
     setClocks(prevClocks => prevClocks.filter((clock) => clock.id !== id));
   }, []);
 
-  const UnderConstruction = useMemo(() => (
-    <div style={{ display:"flex",justifyContent:"space-between", marginRight:"220px"}}>
-      <img src="/Track2one.png" alt="TrackZone" height={'100px'} width={'200px'}/>
-      <h4><strong> `[Beta Version]` </strong> 
-        <br />This site is under construction...
-        <br />Stable version will be released soon...
-      </h4>
-    </div>
-  ), []);
+  
 
 
   return (
-    <div>
-      {UnderConstruction}
+    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen"> 
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <img src="/Track2one.png" alt="TrackZone" className="h-12 w-auto" />
+          <div className="text-right">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">[Beta Version]</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">This site is under construction...</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Stable version will be released soon...</p>
+          </div>
+        </div>
+        <h1 className="text-4xl font-bold text-center text-gray-800 dark:text-white mb-8">TrackZone</h1>
        <LocalClock 
           clock={localClock}
           updateClock={upDateLocalClock} 
@@ -66,7 +68,7 @@ const App = () => {
           deleteClock={deleteClock}
           localClock={localClock.date}
        />
-
+      </div>
     </div>
    
   )

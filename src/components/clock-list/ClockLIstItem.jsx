@@ -20,7 +20,7 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
 
     if(!date || !timer) return null;
   return (
-    <div>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <ClockDisplay
             date={timer}
             offset={clock.offset}
@@ -28,7 +28,7 @@ const ClockLIstItem = ({clock, updateClock, deleteClock,localClock}) => {
             title={clock.title}
         />
         
-        <h3>Time Difference: {timeDifference}</h3>
+        <h3 className="text-lg font-semibold text-center text-gray-800 dark:text-white mb-2">Time Difference: {timeDifference}</h3>
 
         <ClockActions
             clock={clock}
